@@ -1,0 +1,44 @@
+version: '2'
+
+services:
+  mantisbt:
+    # no es muy bueno que sea latest, pero es lo que tenemos por ahora
+    image: vimagick/mantisbt:latest
+    #ports:
+    #  - "8989:80"
+    links:
+      - mysql
+    restart: always
+    # # labels:
+    # #   io.rancher.sidekicks: mantisbt-data
+    # volumes_from:
+    #   - mantisbt-data
+
+  # mantisbt-data:
+  #   image: library/busybox:latest
+  #   labels:
+  #     io.rancher.container.start_once: true
+  #   entrypoint:
+  #     - "/bin/true" # el comando devuelve verdadero (succefully)
+  #   # no estoy seguro de cuales son la carpeta home de mantisbt, o para los plugins
+  #   # CUIDADO: Si hago esto se esconde el contenido del contenedor para html
+  #   volumes:
+  #     - "/srv/docker/mantisbt/html:/var/www/html"
+
+  mysql:
+    image: mysql:5.7.19
+    environment:
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_DATABASE:
+      MYSQL_USER:
+      MYSQL_PASSWORD:
+    restart: always
+    volumes:
+      - "/srv/docker/mantisbt/mysql:/var/lib/mysql"
+
+  # postgres:
+  #   image: postgres:latest
+  #   environment:
+  #     - POSTGRES_USER=root
+  #     - POSTGRES_PASSWORD=root
+  #   restart: always
